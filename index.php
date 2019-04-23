@@ -50,6 +50,14 @@ $stuff = [
         "url"   => "img/lot-6.jpg"
     ]
 ];
+
+function get_price_formatting($unformatted_price) {
+    $ceil_unformatted_price = ceil($unformatted_price);
+    $formatted_price = number_format($ceil_unformatted_price, 0, '.', ' ');
+    $formatted_price .= " ₽";
+    return $formatted_price;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -132,7 +140,7 @@ $stuff = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена: <?= $stuff_item["price"]; ?></span>
-                            <span class="lot__cost"><?= $stuff_item["price"]; ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?= get_price_formatting($stuff_item["price"]); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
