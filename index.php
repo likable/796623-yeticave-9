@@ -61,9 +61,35 @@ function get_price_formatting($unformatted_price) {
     return $formatted_price;
 }
 
+function get_time_to_midnight() {
+    $time_now = date_create("now");
+    $time_midnight = date_create("tomorrow");
+    $time_difference = date_diff($time_now, $time_midnight);
+    $time_formatted = date_interval_format($time_difference, "%H:%I");
+    return $time_formatted;
+}
+
+$time_to_midnight = get_time_to_midnight();
+
+function is_time_to_midnight_finishing($time) {
+    $time = str_replace(":", "", $time);
+    $time = (int)$time;
+    if ($time <= 100) {
+        return true;
+    }
+    return false;
+}
+
+$is_time_finishing = is_time_to_midnight_finishing($time_to_midnight);
+
 //формирую основной контент тега <main>
 $content = include_template('index.php', 
-    ['categories' => $categories, 'stuff' => $stuff]);
+    [
+    'categories' => $categories, 
+    'stuff' => $stuff,
+    'time_to_midnight' => $time_to_midnight,
+    'is_time_finishing' => $is_time_finishing
+    ]);
 
 //формирую layout
 $layout_content = include_template('layout.php', 
@@ -72,7 +98,7 @@ $layout_content = include_template('layout.php',
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 
-    'categories' => $categories,
+    'categories' => $categories
     ]);
 
 print($layout_content);
