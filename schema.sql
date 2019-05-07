@@ -18,14 +18,20 @@ description   TEXT,
 lot_image_src CHAR(128),
 start_price   INT,
 dt_end        TIMESTAMP,
-price_step    INT
+price_step    INT,
+author_id     INT NOT NULL,
+winner_id     INT,
+category_code CHAR(64) NOT NULL,
+current_price INT
 );
 
 CREATE TABLE bets (
-id     INT AUTO_INCREMENT PRIMARY KEY,
-dt_bet TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-price  INT NOT NULL
-)
+id        INT AUTO_INCREMENT PRIMARY KEY,
+dt_bet    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+price     INT NOT NULL,
+better_id INT NOT NULL,
+lot_id    INT NOT NULL
+);
 
 CREATE TABLE users (
 id         INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,4 +41,4 @@ user_name  CHAR(64) NOT NULL,
 password   CHAR(64) NOT NULL,
 avatar_src CHAR(128),
 contacts   CHAR(128)
-)
+);
