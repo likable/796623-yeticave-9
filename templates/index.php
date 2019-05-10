@@ -5,8 +5,8 @@
 
         <!--заполните этот список из массива категорий-->
         <?php foreach ($categories as $category): ?>
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category); ?></a>
+            <li class="promo__item promo__item--<?= htmlspecialchars($category["character_code"]); ?>">
+                <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category["cat_name"]); ?></a>
             </li>
         <?php endforeach; ?>
 
@@ -22,15 +22,17 @@
         <?php foreach ($stuff as $stuff_item): ?>
         <li class="lots__item lot">
             <div class="lot__image">
-                <img src="<?= htmlspecialchars($stuff_item["url"]); ?>" width="350" height="260" alt="<?= htmlspecialchars($stuff_item["title"]); ?>">
+                <img src="<?= htmlspecialchars($stuff_item["lot_image_src"]); ?>" width="350" height="260" alt="<?= htmlspecialchars($stuff_item["lot_name"]); ?>">
             </div>
             <div class="lot__info">
-                <span class="lot__category"><?= htmlspecialchars($stuff_item["cat"]); ?></span>
-                <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= htmlspecialchars($stuff_item["title"]); ?></a></h3>
+                <span class="lot__category"><?= htmlspecialchars($stuff_item["cat_name"]); ?></span>
+                <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= htmlspecialchars($stuff_item["lot_name"]); ?></a></h3>
                 <div class="lot__state">
                     <div class="lot__rate">
-                        <span class="lot__amount">Стартовая цена: <?= htmlspecialchars($stuff_item["price"]); ?></span>
-                        <span class="lot__cost"><?= get_price_formatting(htmlspecialchars($stuff_item["price"])); ?></span>
+                        <span class="lot__amount">Стартовая цена: <?= htmlspecialchars($stuff_item["start_price"]); ?></span>
+                        <span class="lot__cost">
+                            <?= get_price_formatting(htmlspecialchars($stuff_item["current_price"] ? $stuff_item["current_price"] : $stuff_item["start_price"])); ?>
+                        </span>
                     </div>
                     <div class="lot__timer timer <?php if ($is_time_finishing) { print("timer--finishing"); }; ?>">
                         <?= $time_to_midnight; ?>

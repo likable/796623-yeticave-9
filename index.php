@@ -6,53 +6,36 @@ $is_auth = rand(0, 1);
 
 $user_name = 'Виталий'; // укажите здесь ваше имя
 
-$categories = [
-    "Доски и лыжи", 
-    "Крепления", 
-    "Ботинки", 
-    "Одежда", 
-    "Инструменты", 
-    "Разное"
-];
+//helpers
+$database_connection = mysqli_connect("localhost", "root", "", "yeticave");
 
-$stuff = [
-    [
-        "title" => "2014 Rossignol District Snowboard",
-        "cat"   => "Доски и лыжи",
-        "price" => 10999,
-        "url"   => "img/lot-1.jpg"
-    ],
-    [
-        "title" => "DC Ply Mens 2016/2017 Snowboard",
-        "cat"   => "Доски и лыжи",
-        "price" => 159999,
-        "url"   => "img/lot-2.jpg"
-    ],
-    [
-        "title" => "Крепления Union Contact Pro 2015 года размер L/XL",
-        "cat"   => "Крепления",
-        "price" => 8000,
-        "url"   => "img/lot-3.jpg"
-    ],
-    [
-        "title" => "Ботинки для сноуборда DC Mutiny Charocal",
-        "cat"   => "Ботинки",
-        "price" => 10999,
-        "url"   => "img/lot-4.jpg"
-    ],
-    [
-        "title" => "Куртка для сноуборда DC Mutiny Charocal",
-        "cat"   => "Одежда",
-        "price" => 7500,
-        "url"   => "img/lot-5.jpg"
-    ],
-    [
-        "title" => "Маска Oakley Canopy",
-        "cat"   => "Разное",
-        "price" => 5400,
-        "url"   => "img/lot-6.jpg"
-    ]
-];
+if ($database_connection == false) {
+    print_r("Ошибка подключения к базе данных: " . mysqli_connect_error());
+}
+else {
+    //print_r("Соединение с базой данных установлено.");
+}
+
+mysqli_set_charset($database_connection, "utf8");
+
+
+// получение списка новых лотов
+$sql_lots = "SELECT lot_name, start_price, lot_image_src, 
+    current_price, category_code, dt_add, cat_name
+FROM lots
+LEFT JOIN categories
+ON category_code = character_code
+WHERE dt_end > NOW()
+ORDER BY dt_add DESC
+LIMIT 9;";
+$lots_object = mysqli_query($database_connection, $sql_lots);
+$stuff = mysqli_fetch_all($lots_object, MYSQLI_ASSOC);
+
+// получение списка категорий
+$sql_categories = "SELECT cat_name, character_code FROM categories";
+$categories_object = mysqli_query($database_connection, $sql_categories);
+$categories = mysqli_fetch_all($categories_object, MYSQLI_ASSOC);
+
 
 function get_price_formatting($unformatted_price) {
     $ceil_unformatted_price = ceil($unformatted_price);

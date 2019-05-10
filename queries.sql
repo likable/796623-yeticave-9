@@ -20,14 +20,16 @@ VALUES
 
 -- Добавляю список объявлений
 INSERT INTO lots 
-(lot_name, description, lot_image_src, start_price, author_id, category_code)
+(lot_name, description, lot_image_src, start_price, 
+author_id, category_code, dt_end)
 VALUES
 ("2014 Rossignol District Snowboard",
 "",
 "img/lot-1.jpg",
 10999,
 1,
-"boards"),
+"boards",
+DATE_ADD(NOW(), INTERVAL 1 MONTH)),
 ("DC Ply Mens 2016/2017 Snowboard", 
 "Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив
  снег мощным щелчком и четкими дугами. Стекловолокно Bi-Ax, уложенное в двух
@@ -39,31 +41,36 @@ VALUES
 "img/lot-2.jpg",
 159999,
 1,
-"boards"),
+"boards",
+DATE_ADD(NOW(), INTERVAL 1 MONTH)),
 ("Крепления Union Contact Pro 2015 года размер L/XL",
 "",
 "img/lot-3.jpg",
 8000,
 1,
-"attachment"),
+"attachment",
+DATE_ADD(NOW(), INTERVAL 1 MONTH)),
 ("Ботинки для сноуборда DC Mutiny Charocal",
 "",
 "img/lot-4.jpg",
 10999,
 1,
-"boots"),
+"boots",
+DATE_ADD(NOW(), INTERVAL 1 MONTH)),
 ("Куртка для сноуборда DC Mutiny Charocal",
 "",
 "img/lot-5.jpg",
 7500,
 1,
-"clothing"),
+"clothing",
+DATE_ADD(NOW(), INTERVAL 1 MONTH)),
 ("Маска Oakley Canopy",
 "",
 "img/lot-6.jpg",
 5400,
 1,
-"other");
+"other",
+DATE_ADD(NOW(), INTERVAL 1 MONTH));
 
 -- Добавляю ставки
 INSERT INTO bets
@@ -80,11 +87,14 @@ SELECT cat_name FROM categories;
 -- Получить самые новые, открытые лоты.
 -- Название, стартовую цену, ссылку на изображение, цену, название категории.
 SELECT 
-lot_name, start_price, lot_image_src, current_price, category_code, dt_add
+lot_name, start_price, lot_image_src, 
+    current_price, category_code, dt_add, cat_name
 FROM lots
+LEFT JOIN categories
+ON category_code = character_code
 WHERE dt_end > NOW()
 ORDER BY dt_add DESC
-LIMIT 3;
+LIMIT 9;
 
 -- Показать лот по его id. 
 -- Получить также название категории, к которой принадлежит лот.
