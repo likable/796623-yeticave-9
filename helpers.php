@@ -143,4 +143,53 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+/**
+ * Форматирует цену, разделяя тысячи пробелом и подставляя символ рубля
+ * @param int $unformatted_price Цена без форматирования
+ * @return string Форматированная цена
+ */
+function get_price_formatting($unformatted_price) {
+    $ceil_unformatted_price = ceil($unformatted_price);
+    $formatted_price = number_format($ceil_unformatted_price, 0, '.', ' ');
+    $formatted_price .= " ₽";
+    return $formatted_price;
+}
 
+/**
+ * Определяет сколько времени осталось до полуночи 
+ * @return string Время до полуночи 
+ */
+function get_time_to_midnight() {
+    $time_now = date_create("now");
+    $time_midnight = date_create("tomorrow");
+    $time_difference = date_diff($time_now, $time_midnight);
+    $time_formatted = date_interval_format($time_difference, "%H:%I");
+    return $time_formatted;
+}
+
+/**
+ * Определяет меньше ли часа значение времени, 
+ * переданного в качестве аргумента
+ * @param string $time 
+ * @return boolean True если времени меньше часа  
+ */
+function is_time_to_midnight_finishing($time) {
+    $time = str_replace(":", "", $time);
+    $time = (int)$time;
+    if ($time <= 100) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Определяет сколько времени осталось до конца существования лота
+ * @return string Время до конца существования лота 
+ */
+function get_time_to_expiration($dt_exp) {
+    $time_now = date_create("now");
+    $expiration = date_create($dt_exp);
+    $time_difference = date_diff($time_now, $expiration);
+    $time_formatted = date_interval_format($time_difference, "%D:%H:%I");
+    return $time_formatted;
+}
