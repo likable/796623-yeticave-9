@@ -17,12 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "lot-date" => "Введите дату завершения торгов"];
     
     //сохранение введённых в поля значений
-    $lot_name = $_POST["lot-name"] ?? "";
-    $post_cat = $_POST["category"];
-    $message  = $_POST["message"] ?? "";
-    $lot_rate = $_POST["lot-rate"] ?? "";
-    $lot_step = $_POST["lot-step"] ?? "";
-    $lot_date = $_POST["lot-date"] ?? "";
+    $lot_name = htmlspecialchars($_POST["lot-name"]) ?? "";
+    $post_cat = htmlspecialchars($_POST["category"]);
+    $message  = htmlspecialchars($_POST["message"]) ?? "";
+    $lot_rate = htmlspecialchars($_POST["lot-rate"]) ?? "";
+    $lot_step = htmlspecialchars($_POST["lot-step"]) ?? "";
+    $lot_date = htmlspecialchars($_POST["lot-date"]) ?? "";
 
     //заполняю массив ошибок
     foreach ($required as $field_name => $error_text) {
@@ -94,7 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ]);
     }    
     else {
-        //перемещение файла, добавление лота в БД, редирект
+        //нет ошибок формы
+        //перемещение изображения из временной папки в постоянную
         move_uploaded_file($tmp_name, $path);
         
         //приведение данных к формату полей БД

@@ -37,8 +37,8 @@ CREATE TABLE users (
 id         INT AUTO_INCREMENT PRIMARY KEY,
 dt_reg     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 email      CHAR(128) NOT NULL UNIQUE,
-user_name  CHAR(64) NOT NULL,
-password   CHAR(64) NOT NULL,
-avatar_src CHAR(128),
-contacts   CHAR(128)
+user_name  CHAR(128) NOT NULL,
+password   CHAR(255) NOT NULL,
+avatar_src CHAR(255),
+contacts   CHAR(255)
 );
