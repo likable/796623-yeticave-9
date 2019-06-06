@@ -1,42 +1,31 @@
 <?php
 
 require_once("helpers.php");
+require_once("database.php");
 
 //Проверка параметра запроса
-if (isset($_GET["id"])) {
-    $id = htmlspecialchars($_GET["id"]);
+if (empty($_GET["id"])) {
+    header("Location: 404.php");    
 }
 else {
-    header("Location: pages/404.html");
+    $id = htmlspecialchars($_GET["id"]);
 }
 
-//соединение с базой данных и установка кодировки
-$database_connection = mysqli_connect("localhost", "root", "", "yeticave");
-if ($database_connection == false) {
-    print_r("Ошибка подключения к базе данных: " . mysqli_connect_error());
-}
-mysqli_set_charset($database_connection, "utf8");
-
-// получение списка актуальных лотов
-$sql_lots = "SELECT l.id AS lot_id, lot_name, description, start_price, 
+// получение лота по его id, если он ещё актуален
+$sql_lot_by_id = "SELECT l.id AS lot_id, lot_name, description, start_price, 
     lot_image_src, current_price, category_code, dt_add, cat_name, dt_end
 FROM lots l
 LEFT JOIN categories
 ON category_code = character_code
 WHERE dt_end > NOW()
 AND l.id=".$id.";";
-$lots_object = mysqli_query($database_connection, $sql_lots);
-$lot_info = mysqli_fetch_all($lots_object, MYSQLI_ASSOC)[0];
+$lot_by_id_object = mysqli_query($database_connection, $sql_lot_by_id);
+$lot_info = mysqli_fetch_assoc($lot_by_id_object);
 
 //проверка наличия записи в БД
 if ($lot_info === NULL) {
-    header("Location: pages/404.html");
+    header("Location: 404.php");
 }
-
-// получение списка категорий
-$sql_categories = "SELECT cat_name, character_code FROM categories";
-$categories_object = mysqli_query($database_connection, $sql_categories);
-$categories = mysqli_fetch_all($categories_object, MYSQLI_ASSOC);
 
 //functions from helpers.php
 $time_to_lot_expiration = get_time_to_expiration($lot_info["dt_end"]);
