@@ -22,8 +22,7 @@
         <ul class="lots__list">
 
             <!--заполните этот список из массива с товарами-->
-            <?php foreach ($stuff as $stuff_item): ?>
-            <?php
+            <?php foreach ($stuff as $stuff_item):
                 //functions from helpers.php
                 $time_to_lot_expiration = get_time_to_expiration($stuff_item["dt_end"]);
                 $is_time_finishing = is_time_to_midnight_finishing($time_to_lot_expiration);

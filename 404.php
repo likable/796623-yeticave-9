@@ -3,20 +3,16 @@
 require_once("helpers.php");
 require_once("database.php");
 
-$is_auth = rand(0, 1);
-$user_name = 'Виталий'; // укажите здесь ваше имя
-
 //формирую основной контент тега <main>
-$content = include_template('index.php', 
+$content = include_template('content-404.php', 
     [
-    'categories' => $categories, 
-    'stuff' => $stuff,
+    'categories' => $categories 
     ]);
 
 //формирую layout
 $layout_content = include_template('layout.php', 
     [
-    'title'      => 'Title', 
+    'title'      => $lot_info["lot_name"], 
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 
@@ -25,4 +21,3 @@ $layout_content = include_template('layout.php',
 
 print($layout_content);
 
-?>

@@ -170,7 +170,7 @@ function get_time_to_midnight() {
 /**
  * Определяет меньше ли часа значение времени, 
  * переданного в качестве аргумента
- * @param string $time 
+ * @param string $time Время для проверки в формате "%D:%H:%I"
  * @return boolean True если времени меньше часа  
  */
 function is_time_to_midnight_finishing($time) {
@@ -183,8 +183,9 @@ function is_time_to_midnight_finishing($time) {
 }
 
 /**
- * Определяет сколько времени осталось до конца существования лота
- * @return string Время до конца существования лота 
+ * Определяет сколько дней:часов:минут осталось до конца существования лота
+ * @param string $dt_exp Дата конца существования лота
+ * @return string Время до конца существования лота в формате "%D:%H:%I"
  */
 function get_time_to_expiration($dt_exp) {
     $time_now = date_create("now");
