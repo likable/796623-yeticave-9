@@ -194,3 +194,23 @@ function get_time_to_expiration($dt_exp) {
     $time_formatted = date_interval_format($time_difference, "%D:%H:%I");
     return $time_formatted;
 }
+
+/**
+ * Определяет имя пользователя по его id в соответствии с таблицей users
+ * @param object $db Ресурс соединения с базой данных
+ * @param int $id id пользователя
+ * @return string Имя пользователя или пустая строка
+ */
+function get_user_name_from_id($db, $id) {
+    $sql_user_name = "SELECT user_name FROM users WHERE id=?;";
+    $stmt = mysqli_prepare($db, $sql_user_name);
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    $sql_user_name_result = mysqli_stmt_get_result($stmt);
+    if ($sql_user_name_result) {
+        $user_name_array = mysqli_fetch_assoc($sql_user_name_result);
+        $user_name = $user_name_array["user_name"];
+        return $user_name;
+    }
+    return "";
+}
