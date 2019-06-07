@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         
         //редирект на страницу входа
-        header("Location: /sign-up.php");
+        header("Location: /login.php");
     }    
 }
 else {    

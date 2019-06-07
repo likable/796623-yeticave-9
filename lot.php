@@ -3,6 +3,17 @@
 require_once("helpers.php");
 require_once("database.php");
 
+session_start();
+
+$user_id = $_SESSION["id"];
+$is_auth = false;
+$user_name = "";
+
+if (isset($user_id)) {
+    $is_auth = true;
+    $user_name = get_user_name_from_id($database_connection, $user_id);    
+}
+
 //Проверка параметра запроса
 if (empty($_GET["id"])) {
     header("Location: 404.php");    
@@ -14,11 +25,11 @@ else {
 // получение лота по его id, если он ещё актуален
 $sql_lot_by_id = "SELECT l.id AS lot_id, lot_name, description, start_price, 
     lot_image_src, current_price, category_code, dt_add, cat_name, dt_end
-FROM lots l
-LEFT JOIN categories
-ON category_code = character_code
-WHERE dt_end > NOW()
-AND l.id=".$id.";";
+    FROM lots l
+    LEFT JOIN categories
+    ON category_code = character_code
+    WHERE dt_end > NOW()
+    AND l.id=".$id.";";
 $lot_by_id_object = mysqli_query($database_connection, $sql_lot_by_id);
 $lot_info = mysqli_fetch_assoc($lot_by_id_object);
 
@@ -37,7 +48,8 @@ $content = include_template('lotinfo.php',
     'categories' => $categories, 
     'lot_info' => $lot_info,
     'time_to_lot_expiration' => $time_to_lot_expiration,
-    'is_time_finishing' => $is_time_finishing
+    'is_time_finishing' => $is_time_finishing,
+    'is_auth' => $is_auth
     ]);
 
 //формирую layout
