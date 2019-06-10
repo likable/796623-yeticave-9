@@ -23,5 +23,3 @@ ORDER BY dt_add DESC
 LIMIT 9;";
 $lots_object = mysqli_query($database_connection, $sql_lots);
 $stuff = mysqli_fetch_all($lots_object, MYSQLI_ASSOC);
-
-
