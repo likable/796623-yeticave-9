@@ -174,6 +174,7 @@ function get_time_to_midnight() {
  * @return boolean True если времени меньше часа  
  */
 function is_time_to_midnight_finishing($time) {
+    $time = str_replace("д", "", $time);
     $time = str_replace(":", "", $time);
     $time = (int)$time;
     if ($time <= 100) {
@@ -191,7 +192,7 @@ function get_time_to_expiration($dt_exp) {
     $time_now = date_create("now");
     $expiration = date_create($dt_exp);
     $time_difference = date_diff($time_now, $expiration);
-    $time_formatted = date_interval_format($time_difference, "%D:%H:%I");
+    $time_formatted = date_interval_format($time_difference, "%Dд%H:%I");
     return $time_formatted;
 }
 
@@ -213,4 +214,40 @@ function get_user_name_from_id($db, $id) {
         return $user_name;
     }
     return "";
+}
+
+/**
+ * Возвращает корректную запись времени ставки
+ * @param string $dt_bet Дата и время ставки
+ * @return string Корректная запись времени ставки
+ */
+function when_was_bet($dt_bet) {
+    $output_str = "";
+    $stamp_now = time();
+    $stamp_midnight = strtotime(date("Y-m-d"));
+    $stamp_bet = strtotime($dt_bet);
+    
+    if ($stamp_bet >= ($stamp_midnight - 86400) && 
+            $stamp_bet < $stamp_midnight) {
+        $output_str = date("Вчера в H:i", $stamp_bet);
+        return $output_str;
+    }
+    elseif ($stamp_bet >= $stamp_midnight) {
+        $hours = (int) (($stamp_now - $stamp_bet)/3600);
+        $minutes = (int) ((($stamp_now - $stamp_bet)%3600)/60);
+        $right_h = get_noun_plural_form($hours, " час", " часа", " часов");
+        $right_m = get_noun_plural_form($minutes, " минута", " минуты", 
+                " минут");
+        if ($hours) {
+            $output_str = $hours . $right_h . " " . $minutes . $right_m 
+                    . " назад";
+        }
+        else {
+            $output_str = $minutes . $right_m . " назад";
+        }
+        return $output_str;
+    }
+    
+    $output_str = date("d.m.y в H:i", $stamp_bet);
+    return $output_str;
 }

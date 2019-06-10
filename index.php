@@ -18,7 +18,7 @@ if (isset($user_id)) {
 $content = include_template('index.php', 
     [
     'categories' => $categories, 
-    'stuff' => $stuff,
+    'stuff'      => $stuff
     ]);
 
 //формирую layout
