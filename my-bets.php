@@ -2,6 +2,7 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
 
 session_start();
 
@@ -16,7 +17,7 @@ if (isset($user_id)) {
 
 //получение всех ставок пользователя
 $sql_bets_by_id = "SELECT price, dt_bet, lot_name, lot_image_src, 
-    cat_name, dt_end, lot_id
+    cat_name, dt_end, lot_id, winner_id
     FROM bets b
     LEFT JOIN lots l ON lot_id = l.id
     LEFT JOIN categories c ON category_code = character_code 
@@ -33,8 +34,9 @@ if ($sql_bets_by_id_result) {
 //формирую основной контент тега <main>
 $content = include_template('my-bets-main.php', 
     [
-    'categories'             => $categories,
-    'my_bets'                => $my_bets
+    'categories' => $categories,
+    'my_bets'    => $my_bets,
+    'user_id'    => $user_id
     ]);
 
 //формирую layout

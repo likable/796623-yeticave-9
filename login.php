@@ -2,6 +2,7 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
 
 $errors = [];
 
@@ -90,7 +91,7 @@ else {
 //формирую layout
 $layout_content = include_template('layout.php', 
     [
-    'title'      => "Добавление лота", 
+    'title'      => "Вход", 
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 

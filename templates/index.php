@@ -1,5 +1,3 @@
-<?php require_once("helpers.php"); ?>
-
 <main class="container">   
     <section class="promo">
         <h2 class="promo__title">Нужен стафф для катки?</h2>
@@ -9,7 +7,7 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
                 <li class="promo__item promo__item--<?= htmlspecialchars($category["character_code"]); ?>">
-                    <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($category["cat_name"]); ?></a>
+                    <a class="promo__link" href="/all-lots.php?category=<?= $category["cat_name"]; ?>"><?= htmlspecialchars($category["cat_name"]); ?></a>
                 </li>
             <?php endforeach; ?>
 

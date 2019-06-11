@@ -2,6 +2,7 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
 
 session_start();
 
@@ -29,13 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             start_price, current_price, dt_end, cat_name 
             FROM lots l 
             LEFT JOIN categories c ON category_code = character_code 
-            WHERE MATCH(lot_name, description) AGAINST(?);";
+            WHERE MATCH(lot_name, description) AGAINST(?)
+            ORDER BY dt_add DESC;";
         $stmt_search = mysqli_prepare($database_connection, $sql_search);
         mysqli_stmt_bind_param($stmt_search, 's', $search);
         mysqli_stmt_execute($stmt_search);
         $sql_search_result = mysqli_stmt_get_result($stmt_search);
         if ($sql_search_result) {
-            $searched_lots = mysqli_fetch_all($sql_search_result, MYSQLI_ASSOC);
+            $srched_lots = mysqli_fetch_all($sql_search_result, MYSQLI_ASSOC);
+            $searched_lots = array_slice($srched_lots, 0, 9);
             $searched_lots_count = mysqli_num_rows($sql_search_result);
         }
         

@@ -2,6 +2,7 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
 
 $errors = [];
 
@@ -36,13 +37,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
      
     //проверка на существование адреса почты в БД
-    $sql_get_email = "SELECT * FROM users WHERE email='".$email."';";
-    $get_email_object = mysqli_query($database_connection, $sql_get_email);
-    $old_email = mysqli_fetch_assoc($get_email_object);
+    $sql_get_email = "SELECT * FROM users WHERE email=?;";
+    $stmt_get_email = mysqli_prepare($database_connection, $sql_get_email);
+    mysqli_stmt_bind_param($stmt_get_email, 's', $email);
+    mysqli_stmt_execute($stmt_get_email);
+    $sql_get_email_result = mysqli_stmt_get_result($stmt_get_email);
+    if ($sql_get_email_result) {
+        $old_email = mysqli_fetch_assoc($sql_get_email_result);
+    }
     if (isset($old_email)) {
         $errors["email"] = "email занят другим пользователем";
     }
-
+    
     //валидация
     if (count($errors)) {
         //формирую основной контент тега <main> --> ошибки заполнения формы
@@ -99,7 +105,7 @@ else {
 //формирую layout
 $layout_content = include_template('layout.php', 
     [
-    'title'      => "Добавление лота", 
+    'title'      => "Регистрация", 
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 

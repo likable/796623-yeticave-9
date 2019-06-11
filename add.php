@@ -2,6 +2,7 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
 
 session_start();
 
@@ -85,8 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         else {
             $path = "uploads/" . time() . $name;
-            //премещать файл буду позже, иначе он загружается 
-            //даже при невалидной форме 
         }                    
     }
     else {
@@ -116,13 +115,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //приведение данных к формату полей БД
         $int_rate = (int) $lot_rate;
         $int_step = (int) $lot_step;
-        $author_id = 2;
         
+        //преобразование категории лота к формату поля БД
         $sql_cat = "SELECT character_code FROM categories "
-                . "WHERE cat_name='".$post_cat."';";
-        $cat_object = mysqli_query($database_connection, $sql_cat);
-        $cat = mysqli_fetch_assoc($cat_object)["character_code"];
-              
+                . "WHERE cat_name=?;";
+        $stmt_cat = mysqli_prepare($database_connection, $sql_cat);
+        mysqli_stmt_bind_param($stmt_cat, 's', $post_cat);
+        mysqli_stmt_execute($stmt_cat);
+        $sql_cat_result = mysqli_stmt_get_result($stmt_cat);
+        if ($sql_cat_result) {
+            $cat = mysqli_fetch_assoc($sql_cat_result)["character_code"];
+        }
+        
         //добавление лота в БД
         $sql_add_lot = "INSERT INTO lots "
                 . "(lot_name, description, lot_image_src, start_price, "
@@ -137,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         
         mysqli_stmt_bind_param($stmt, 'sssisiis', $lot_name, $message, $path,
-                $int_rate, $lot_date, $int_step, $author_id, $cat);
+                $int_rate, $lot_date, $int_step, $user_id, $cat);
         
         mysqli_stmt_execute($stmt);
         
@@ -147,9 +151,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         //получение id добавленного лота
-        $sql_new_id = "SELECT id FROM lots WHERE lot_image_src='".$path."';";
-        $new_id_object = mysqli_query($database_connection, $sql_new_id);
-        $new_id = mysqli_fetch_assoc($new_id_object)["id"];
+        $sql_new_id = "SELECT id FROM lots WHERE lot_image_src=?;";
+        $stmt_id = mysqli_prepare($database_connection, $sql_new_id);
+        mysqli_stmt_bind_param($stmt_id, 's', $path);
+        mysqli_stmt_execute($stmt_id);
+        $sql_new_id_result = mysqli_stmt_get_result($stmt_id);
+        if ($sql_new_id_result) {
+            $new_id = mysqli_fetch_assoc($sql_new_id_result)["id"];
+        }
         
         //редирект на новый лот
         header("Location: /lot.php?id=".$new_id);
