@@ -42,3 +42,5 @@ password   CHAR(255) NOT NULL,
 avatar_src CHAR(255),
 contacts   CHAR(255)
 );
+
+CREATE FULLTEXT INDEX search_index ON lots(lot_name, description);

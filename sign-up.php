@@ -103,7 +103,8 @@ $layout_content = include_template('layout.php',
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 
-    'categories' => $categories
+    'categories' => $categories,
+    'search'     => $search
     ]);
 
 print($layout_content);
