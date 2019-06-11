@@ -1,0 +1,9 @@
+{
+    "name": "went/yeticave",
+    "description": "web auction",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

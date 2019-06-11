@@ -2,6 +2,7 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
 
 //формирую основной контент тега <main>
 $content = include_template('content-404.php', 
@@ -12,7 +13,7 @@ $content = include_template('content-404.php',
 //формирую layout
 $layout_content = include_template('layout.php', 
     [
-    'title'      => $lot_info["lot_name"], 
+    'title'      => "Ошибка", 
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 
@@ -21,4 +22,3 @@ $layout_content = include_template('layout.php',
     ]);
 
 print($layout_content);
-

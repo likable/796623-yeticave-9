@@ -3,7 +3,7 @@
     <ul class="nav__list container">
       <?php foreach ($categories as $category): ?>
         <li class="nav__item">
-            <a href="all-lots.html"><?= htmlspecialchars($category["cat_name"]); ?></a>
+            <a href="/all-lots.php?category=<?= $category["cat_name"]; ?>"><?= htmlspecialchars($category["cat_name"]); ?></a>
         </li>
       <?php endforeach; ?>
     </ul>
@@ -29,9 +29,15 @@
                 <?= htmlspecialchars($my_bet["cat_name"]); ?>
               </td>
               <td class="rates__timer">
-                <div class="timer <?php if ($is_time_finishing) { print("timer--finishing"); } ?>">
-                  <?= $time_to_lot_expiration; ?>
-                </div>
+                <?php if ($my_bet["winner_id"] == $user_id): ?> 
+                  <div class="timer timer--win">Ставка выиграла</div>
+                <?php elseif (time() > strtotime($my_bet["dt_end"])): ?> 
+                  <div class="timer timer--end">Торги окончены</div>
+                <?php elseif ($is_time_finishing): ?>  
+                  <div class="timer timer--finishing"><?= $time_to_lot_expiration; ?></div>
+                <?php else: ?> 
+                  <div class="timer"><?= $time_to_lot_expiration; ?></div>
+                <?php endif; ?>
               </td>
               <td class="rates__price">
                 <?= htmlspecialchars($my_bet["price"]); ?> р

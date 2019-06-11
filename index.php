@@ -2,6 +2,9 @@
 
 require_once("helpers.php");
 require_once("database.php");
+require_once("vendor/autoload.php");
+
+include_once("getwinner.php");
 
 session_start();
 
@@ -24,7 +27,7 @@ $content = include_template('index.php',
 //формирую layout
 $layout_content = include_template('layout.php', 
     [
-    'title'      => 'Title', 
+    'title'      => 'Главная', 
     'is_auth'    => $is_auth, 
     'user_name'  => $user_name, 
     'content'    => $content, 

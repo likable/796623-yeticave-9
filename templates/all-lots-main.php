@@ -2,16 +2,17 @@
     <nav class="nav">
       <ul class="nav__list container">
         <?php foreach ($categories as $category): ?>
-                <li class="nav__item">
-                    <a href="/all-lots.php?category=<?= $category["cat_name"]; ?>"><?= htmlspecialchars($category["cat_name"]); ?></a>
-                </li>
+            <li class="nav__item">
+                <a href="/all-lots.php?category=<?= $category["cat_name"]; ?>"><?= htmlspecialchars($category["cat_name"]); ?></a>
+            </li>
         <?php endforeach; ?>
       </ul>
     </nav>
     <div class="container">
+        
       <section class="lots">
           
-        <h2>Результаты поиска по запросу «<span><?= htmlspecialchars($search); ?></span>»</h2>
+        <h2>Все лоты в категории «<span><?= htmlspecialchars($search_cat); ?></span>»</h2>
         
         <?php if ($searched_lots_count > 0): ?>
         
@@ -47,14 +48,14 @@
             </ul>
         
         <?php elseif ($searched_lots_count === 0): ?>
-            <p>Ничего не найдено по вашему запросу.</p>
+            <p>Выбранная категория пуста.</p>
         <?php elseif ($searched_lots_count === -1): ?>
-            <p>Введите текст для поиска.</p>
+            <p>Выберите категорию.</p>
         <?php endif; ?>
         
       </section>
-        
-      <?php if ($searched_lots_count > 9): ?>  
+      
+      <?php if ($searched_lots_count > 9): ?>
         <ul class="pagination-list">
           <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
           <li class="pagination-item pagination-item-active"><a>1</a></li>
@@ -63,7 +64,6 @@
           <li class="pagination-item"><a href="#">4</a></li>
           <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
         </ul>
-      <?php endif; ?>  
-        
+      <?php endif; ?>
     </div>
 </main>
