@@ -38,7 +38,7 @@
             <p class="lot-item__form-item form__item form__item--invalid">
               <label for="cost">Ваша ставка</label>
               <input id="cost" type="text" name="cost" placeholder="<?= htmlspecialchars($min_bet); ?>" value="<?= $cost; ?>">
-              <span class="form__error"><?= htmlspecialchars($errors["cost"]); ?></span>
+              <span class="form__error"><?php if (isset($errors["cost"])) { print(htmlspecialchars($errors["cost"])); }; ?></span>
             </p>
             <button type="submit" class="button">Сделать ставку</button>
           </form>

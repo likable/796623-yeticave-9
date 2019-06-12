@@ -230,7 +230,6 @@ function when_was_bet($dt_bet) {
     if ($stamp_bet >= ($stamp_midnight - 86400) && 
             $stamp_bet < $stamp_midnight) {
         $output_str = date("Вчера в H:i", $stamp_bet);
-        return $output_str;
     }
     elseif ($stamp_bet >= $stamp_midnight) {
         $hours = (int) (($stamp_now - $stamp_bet)/3600);
@@ -245,9 +244,9 @@ function when_was_bet($dt_bet) {
         else {
             $output_str = $minutes . $right_m . " назад";
         }
-        return $output_str;
     }
-    
-    $output_str = date("d.m.y в H:i", $stamp_bet);
+    else {
+        $output_str = date("d.m.y в H:i", $stamp_bet);
+    }      
     return $output_str;
 }

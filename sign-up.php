@@ -97,8 +97,12 @@ else {
     //формирую основной контент тега <main> --> первоначальное состояние формы
     $content = include_template('sign-up-main.php', 
         [
-        'categories' => $categories,
-        'errors'     => []
+        'categories' => $categories, 
+        'errors'     => [],
+        'email'      => '',
+        'password'   => '',
+        'firstname'  => '',
+        'message'    => ''
         ]);
 }
 
@@ -106,11 +110,11 @@ else {
 $layout_content = include_template('layout.php', 
     [
     'title'      => "Регистрация", 
-    'is_auth'    => $is_auth, 
-    'user_name'  => $user_name, 
+    'is_auth'    => false, 
+    'user_name'  => '', 
     'content'    => $content, 
     'categories' => $categories,
-    'search'     => $search
+    'search'     => ''
     ]);
 
 print($layout_content);

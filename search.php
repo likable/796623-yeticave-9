@@ -4,11 +4,17 @@ require_once("helpers.php");
 require_once("database.php");
 require_once("vendor/autoload.php");
 
-session_start();
+if (session_id() == '') {
+    session_start();
+}
 
-$user_id = $_SESSION["id"];
+if (isset($_SESSION["id"])) {
+   $user_id = $_SESSION["id"];
+}
+
 $is_auth = false;
 $user_name = "";
+$search = "";
 
 if (isset($user_id)) {
     $is_auth = true;
@@ -19,8 +25,10 @@ if (isset($user_id)) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     //сохранение введённых в поля значений
-    $search = htmlspecialchars($_GET["search"]) ?? "";
-    $search = trim($search);
+    if (isset($_GET["search"])) {
+        $search = htmlspecialchars($_GET["search"]);
+        $search = trim($search);
+    }
 
     //валидация
     if (!empty($search)) {
@@ -72,7 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //поле поиска пустое
         $content = include_template('search-main.php', 
         [
-        'categories'          => $categories,
+        'categories'          => $categories, 
+        'search'              => "",
+        'searched_lots'       => [],
+        'bets_count_array'    => [],
         'searched_lots_count' => -1
         ]);
     }    
@@ -81,7 +92,10 @@ else {
     //формирую основной контент тега <main> --> форма не отправлена
     $content = include_template('search-main.php', 
         [
-        'categories'          => $categories,
+        'categories'          => $categories, 
+        'search'              => "",
+        'searched_lots'       => [],
+        'bets_count_array'    => [],
         'searched_lots_count' => -1
         ]);
 }
