@@ -4,18 +4,26 @@ require_once("helpers.php");
 require_once("database.php");
 require_once("vendor/autoload.php");
 
-session_start();
+if(session_id() == '') {
+    session_start();
+}
 
-$user_id = $_SESSION["id"];
+if (isset($_SESSION["id"])) {
+   $user_id = $_SESSION["id"];
+}
+
 $is_auth = false;
 $user_name = "";
+$search_cat = "";
 
 if (isset($user_id)) {
     $is_auth = true;
     $user_name = get_user_name_from_id($database_connection, $user_id);    
 }
 
-$search_cat = htmlspecialchars($_GET["category"]) ?? "";
+if (isset($_GET["category"])) {
+    $search_cat = htmlspecialchars($_GET["category"]);
+}
 
 //проверка GET запроса
 if (!empty($search_cat)) {
@@ -67,11 +75,13 @@ else {
     //запроса не было
     $content = include_template('all-lots-main.php', 
     [
-    'categories'          => $categories,
+    'categories'          => $categories, 
+    'search_cat'          => "",
+    'searched_lots'       => [],
+    'bets_count_array'    => [],
     'searched_lots_count' => -1
     ]);
 }    
-
 
 //формирую layout
 $layout_content = include_template('layout.php', 
@@ -81,7 +91,7 @@ $layout_content = include_template('layout.php',
     'user_name'  => $user_name, 
     'content'    => $content, 
     'categories' => $categories,
-    'search_cat' => $search_cat
+    'search'     => ''
     ]);
 
 print($layout_content);

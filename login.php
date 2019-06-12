@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user_data = mysqli_fetch_assoc($sql_user_result);
     }
     
-    //проверка существования пользователя с введённым email в БД 
+    //проверка существования пользователя с введённым email в БД
+    $pass_hash = "";
     if (isset($user_data)) {
         $pass_hash = $user_data["password"];
     }
@@ -84,7 +85,9 @@ else {
     $content = include_template('login-main.php', 
         [
         'categories' => $categories,
-        'errors'     => []
+        'errors'     => [],
+        'email'      => '',
+        'password'   => ''
         ]);
 }
 
@@ -92,11 +95,11 @@ else {
 $layout_content = include_template('layout.php', 
     [
     'title'      => "Вход", 
-    'is_auth'    => $is_auth, 
-    'user_name'  => $user_name, 
+    'is_auth'    => false, 
+    'user_name'  => '', 
     'content'    => $content, 
     'categories' => $categories,
-    'search'     => $search
+    'search'     => ''
     ]);
 
 print($layout_content);

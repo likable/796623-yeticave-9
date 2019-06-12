@@ -4,9 +4,14 @@ require_once("helpers.php");
 require_once("database.php");
 require_once("vendor/autoload.php");
 
-session_start();
+if(session_id() == '') {
+    session_start();
+}
 
-$user_id = $_SESSION["id"];
+if (isset($_SESSION["id"])) {
+   $user_id = $_SESSION["id"];
+}
+
 $is_auth = false;
 $user_name = "";
 
@@ -15,8 +20,7 @@ if (isset($user_id)) {
     $user_name = get_user_name_from_id($database_connection, $user_id);    
 }
 else {
-    http_response_code(403);
-    die();
+    header("Location: /404.php?err=403");
 }
 
 $errors = [];
@@ -71,7 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         "Дата окончания торгов должна отличаться от текущей".
                         " минимум на один день и быть в формате ГГГГ-ММ-ДД";
             }
-        }        
+        }
+        elseif ($field_name == "lot-name") {
+            if (strlen($_POST[$field_name]) > 127) {
+                $errors[$field_name] = "Наименование лота слишком длинное";
+            }
+        }
     }
         
     //проверка файла изображения
@@ -168,8 +177,14 @@ else {
     //формирую основной контент тега <main> --> первоначальное состояние формы
     $content = include_template('add-lot.php', 
         [
-        'categories' => $categories,
-        'errors'     => []
+        'categories' => $categories, 
+        'errors'     => [],
+        'lot_name'   => '',
+        'post_cat'   => '',
+        'message'    => '',
+        'lot_rate'   => '',
+        'lot_step'   => '',
+        'lot_date'   => ''
         ]);
 }
 
@@ -181,7 +196,7 @@ $layout_content = include_template('layout.php',
     'user_name'  => $user_name, 
     'content'    => $content, 
     'categories' => $categories,
-    'search'     => $search
+    'search'     => ''
     ]);
 
 print($layout_content);

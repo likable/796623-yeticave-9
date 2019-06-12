@@ -4,17 +4,6 @@ require_once("helpers.php");
 require_once("database.php");
 require_once("vendor/autoload.php");
 
-session_start();
-
-$user_id = $_SESSION["id"];
-$is_auth = false;
-$user_name = "";
-
-if (isset($user_id)) {
-    $is_auth = true;
-    $user_name = get_user_name_from_id($database_connection, $user_id);    
-}
-
 //получение списка лотов с истёкшим сроком годности без победителей
 $sql_expired_lots = "SELECT * FROM lots WHERE dt_end <= NOW() 
     AND winner_id IS NULL;";

@@ -4,9 +4,14 @@ require_once("helpers.php");
 require_once("database.php");
 require_once("vendor/autoload.php");
 
-session_start();
+if (session_id() == '') {
+    session_start();
+}
 
-$user_id = $_SESSION["id"];
+if (isset($_SESSION["id"])) {
+   $user_id = $_SESSION["id"];
+}
+
 $is_auth = false;
 $user_name = "";
 
@@ -47,7 +52,7 @@ $layout_content = include_template('layout.php',
     'user_name'  => $user_name, 
     'content'    => $content, 
     'categories' => $categories,
-    'search'     => $search
+    'search'     => ''
     ]);
 
 print($layout_content);

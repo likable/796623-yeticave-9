@@ -4,11 +4,17 @@ require_once("helpers.php");
 require_once("database.php");
 require_once("vendor/autoload.php");
 
-session_start();
+if(session_id() == '') {
+    session_start();
+}
 
-$user_id = $_SESSION["id"];
+if (isset($_SESSION["id"])) {
+   $user_id = $_SESSION["id"];
+}
+
 $is_auth = false;
 $user_name = "";
+$id = "";
 
 if (isset($user_id)) {
     $is_auth = true;
@@ -78,7 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ["cost" => "Заполните это поле"];
     
     //сохранение введённых в поля значений
-    $cost = htmlspecialchars($_POST["cost"]) ?? "";
+    $cost = "";
+    if (isset($_POST["cost"])) {
+        $cost = htmlspecialchars($_POST["cost"]);
+    }
 
     //заполняю массив ошибок
     foreach ($required as $field_name => $error_text) {
@@ -174,7 +183,7 @@ else {
         [
         'categories'             => $categories,
         'errors'                 => [],
-        'cost'                   => $cost,
+        'cost'                   => '',
         'lot_info'               => $lot_info,
         'time_to_lot_expiration' => $time_to_lot_expiration,
         'is_time_finishing'      => $is_time_finishing,
@@ -194,7 +203,7 @@ $layout_content = include_template('layout.php',
     'user_name'  => $user_name, 
     'content'    => $content, 
     'categories' => $categories,
-    'search'     => $search
+    'search'     => ''
     ]);
 
 print($layout_content);
