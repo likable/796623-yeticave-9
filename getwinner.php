@@ -28,6 +28,9 @@ foreach ($expired_lots as $expired_lot) {
     }
     
     if ($winner) {
+        //SMTP-данные устарели, в связи этим отправка писем отключена
+        
+        /*
         //отправляю письмо победителю
         $content = include_template('email.php', ['winner' => $winner]);
         $to = $winner["email"];
@@ -46,6 +49,7 @@ foreach ($expired_lots as $expired_lot) {
         //Отправка сообщения
         $mailer = new Swift_Mailer($transport);
         $mailer->send($message);
+         */
         
         $winner_id = $winner["better_id"];
     }
